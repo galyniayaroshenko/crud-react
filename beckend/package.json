@@ -1,0 +1,17 @@
+{
+  "name": "TodoApp",
+  "version": "0.0.1",
+  "scripts": {
+    "server": "babel-node server/app.js"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "cors": "*",
+    "express": "*",
+    "mongoose": "*"
+  },
+  "devDependencies": {
+    "babel": "5.x",
+    "babel-loader": "5.x"
+  }
+}
