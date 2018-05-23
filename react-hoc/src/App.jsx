@@ -1,23 +1,16 @@
 import React from 'react';
 
-import Form from './components/Form';
-import Filter from './components/Filter';
-import List from './components/List';
-import Search from './components/Search';
+import TodosContainer from './components/TodosContainer';
 import withCrud from './hoc/withCrud';
 
-function App({ data, create, update, remove, filter, setFilterInAll, searchValue, search }) {
+function App({ create, data, remove, update }) {
   return (
-    <div className="containe-list">
-      <Search searchValue={searchValue} onSearch={search} />
-      <Form onSubmit={create} />
-      <List
-        todos={data}
-        onUpdate={update}
-        onRemove={remove}
-      />
-      <Filter onFilter={filter} isSetFilterInAll={setFilterInAll} />
-    </div>
+    <TodosContainer
+      data={data}
+      onCreate={create}
+      onRemove={remove}
+      onUpdate={update}
+    />
   );
 }
 

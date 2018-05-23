@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Item from './Item';
 
-function List({ todos, onUpdate, onRemove }) {
+function List({ onRemove, onUpdate, todos }) {
   return (
     <div className="todo-list list-group">
       {
@@ -10,9 +10,9 @@ function List({ todos, onUpdate, onRemove }) {
           return (
             <Item
               key={todo._id}
-              todo={todo}
-              onUpdate={onUpdate}
               onRemove={onRemove}
+              onUpdate={onUpdate}
+              todo={todo}
             />
           );
         }

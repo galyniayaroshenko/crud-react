@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Checkbox from './Checkbox';
 
-function Item({ todo, onUpdate, onRemove}) {
+function Item({ onRemove, onUpdate, todo}) {
   return (
     <div className="todo list-group-item justify-content-between">
       <label>

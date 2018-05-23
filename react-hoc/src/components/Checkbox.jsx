@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 
 class Checkbox extends Component {
-  state = {
-    completed: this.props.todo.completed
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      completed: props.todo.completed
+    };
+  }
 
   handleStatusChange = () => {
     const newTodo = Object.assign({}, this.props.todo, { completed: !this.state.completed });
@@ -16,9 +20,9 @@ class Checkbox extends Component {
     return (
       <div>
         <input
-          type="checkbox"
           checked={this.state.completed}
           onChange={this.handleStatusChange}
+          type="checkbox"
         />
       </div>
     );

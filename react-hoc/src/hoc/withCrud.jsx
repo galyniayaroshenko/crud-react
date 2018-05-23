@@ -1,31 +1,17 @@
-import React from 'react';
 import axios from 'axios';
+import React from 'react';
 
 function withCrud(Component, apiUrl) {
   class WithCrud extends React.Component {
     state = {
-      data: [],
-      todos: [],
-      setFilterInAll: false,
-      searchValue: '',
-      filterValueListList: []
+      data: []
     };
 
+    /* hooks */
     componentDidMount() {
       this.get();
     }
-
-    get = () => {
-      axios.get(apiUrl)
-        .then(response => response.data)
-        .then(data => {
-          this.setState(Object.assign(
-            {},
-            this.state,
-            { data, todos: data, filterValueList: data }
-          ));
-        });
-    };
+    /* hooks */
 
     create = data => {
       axios.post(apiUrl, data)
@@ -33,11 +19,23 @@ function withCrud(Component, apiUrl) {
         .then(createdItem => {
           const data = [...this.state.data, createdItem];
 
-          this.setState(Object.assign(
-            {},
-            this.state,
-            { data, todos: data, setFilterInAll: true, searchValue: '' }
-          ));
+          this.setState({ data });
+        });
+    };
+
+    get = () => {
+      axios.get(apiUrl)
+        .then(response => response.data)
+        .then(data => this.setState({ data }));
+    };
+
+    remove = id => {
+      axios.delete(`${apiUrl}/${id}`)
+        .then(response => response.data)
+        .then(() => {
+          const data = this.state.data.filter(item => item._id !== id);
+
+          this.setState({ data });
         });
     };
 
@@ -53,97 +51,18 @@ function withCrud(Component, apiUrl) {
             return updatedItem.data;
           });
 
-          this.setState(Object.assign(
-            {},
-            this.state,
-            { data, todos: data, setFilterInAll: true, searchValue: '' }
-          ));
+          this.setState({ data });
         });
-    };
-
-    remove = id => {
-      axios.delete(`${apiUrl}/${id}`)
-        .then(response => response.data)
-        .then(() => {
-          const data = this.state.data.filter(item => item._id !== id);
-
-          this.setState(Object.assign(
-            {},
-            this.state,
-            { data, todos: data, setFilterInAll: true, searchValue: '' }
-          ));
-        });
-    };
-
-    filter = id => {
-      switch(id) {
-        case 'all': {
-          this.setState(Object.assign(
-            {},
-            this.state,
-            { todos: this.state.data, setFilterInAll: false, filterValueList: this.state.data, searchValue: '' }
-          ));
-
-          break;
-        }
-        case 'completed': {
-          const newTodos = this.state.data.filter(item => {
-            return item.completed;
-          });
-
-          this.setState(Object.assign(
-            {},
-            this.state,
-            { todos: newTodos, setFilterInAll: false, filterValueList: newTodos, searchValue: '' }
-          ));
-
-          break;
-        }
-        case 'active': {
-          const newTodos = this.state.data.filter(item => {
-            return !item.completed;
-          });
-
-          this.setState(Object.assign(
-            {},
-            this.state,
-            { todos: newTodos, setFilterInAll: false, filterValueList: newTodos, searchValue: '' }
-          ));
-
-          break;
-        }
-
-        default: {
-          console.log('I do not know this id');
-        }
-      }
-    };
-
-    search = event => {
-      const value = event.target.value.toLowerCase();
-      const result = this.state.filterValueList.filter(item => {
-        return item.title.toLowerCase().indexOf(value) !== -1;
-      });
-
-      this.setState(Object.assign(
-        {},
-        this.state,
-        { todos: result, searchValue: event.target.value }
-      ));
     };
 
     render() {
       return (
         <Component
-          search={this.search}
-          searchValue={this.state.searchValue}
-          setFilterInAll={this.state.setFilterInAll}
-          data={this.state.todos}
-          get={this.get}
           create={this.create}
-          update={this.update}
+          data={this.state.data}
+          get={this.get}
           remove={this.remove}
-          filter={this.filter}
+          update={this.update}
           {...this.props}
         />
       );
